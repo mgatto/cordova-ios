@@ -344,6 +344,10 @@ static NSString *stripFragment(NSString* url)
             [self pollForPageLoadFinish:webView];
             break;
     }
+
+    // avoid memory leaks with ajax-based loading of HTML.
+    [[NSUserDefaults standardUserDefaults] setInteger:0 forKey:@"WebKitCacheModelPreferenceKey"];
+
     VerboseLog(@"webView didFinishLoad (after). state=%d loadCount=%d fireCallback=%d", _state, _loadCount, fireCallback);
     if (fireCallback && [_delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [_delegate webViewDidFinishLoad:webView];
